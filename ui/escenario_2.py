@@ -7,7 +7,7 @@ class Escenario2:
     def __init__(self):
         self.car = None
         self.cars = []
-        self.velocidad_simulacion = 0
+        self.velocidad_simulacion = 5
         
 
 

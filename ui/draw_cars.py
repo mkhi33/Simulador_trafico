@@ -63,7 +63,55 @@ class Cars:
                 {
                     'dim': (138,60), 
                     'image': pygame.image.load('./resources/images/cars/car-12.png')
-                }
+                },
+            "car_13":                 {
+                    'dim': (138,71), 
+                    'image': pygame.image.load('./resources/images/cars/car-13.png')
+            },
+            "car_14":                 {
+                    'dim': (138,54), 
+                    'image': pygame.image.load('./resources/images/cars/car-14.png')
+            },
+            "car_15":                 {
+                    'dim': (138,58), 
+                    'image': pygame.image.load('./resources/images/cars/car-15.png')
+            },
+            "car_16":                 {
+                    'dim': (138,47), 
+                    'image': pygame.image.load('./resources/images/cars/car-16.png')
+            },
+            "car_17":                 {
+                    'dim': (138,56), 
+                    'image': pygame.image.load('./resources/images/cars/car-17.png')
+            },
+            "car_18":                 {
+                    'dim': (138,60), 
+                    'image': pygame.image.load('./resources/images/cars/car-18.png')
+            },
+            "car_19":                 {
+                    'dim': (138,47), 
+                    'image': pygame.image.load('./resources/images/cars/car-19.png')
+            },
+            "car_20":                 {
+                    'dim': (138,55), 
+                    'image': pygame.image.load('./resources/images/cars/car-20.png')
+            },
+            "car_21":                 {
+                    'dim': (138,59), 
+                    'image': pygame.image.load('./resources/images/cars/car-21.png')
+            },
+            "car_22":                 {
+                    'dim': (138,53), 
+                    'image': pygame.image.load('./resources/images/cars/car-22.png')
+            },
+            "car_23":                 {
+                    'dim': (138,63), 
+                    'image': pygame.image.load('./resources/images/cars/car-23.png')
+            },
+            "car_24":                 {
+                    'dim': (138,47), 
+                    'image': pygame.image.load('./resources/images/cars/car-24.png')
+            },
         }
 
         self.pos_start = {
@@ -75,11 +123,11 @@ class Cars:
 
         self.pos_start_1 = {
             "carril_1": (0, 420), # carril derecho a las 9
-            "carril_2": (1199, 340), # carril izquierdo a las 9
+            "carril_2": (1199, 340), # carril izquierdo a las 9 1199
             "carril_3": (573, 145), # carril derecho en las 12
-            "carril_4": (670, 145), # carril izquierdo a las 12
-            "carril_4": (670, 700), # carril derecho a las 6
-            "carril_4": (605, 700), # carril izquierdo a las 6
+            "carril_4": (640, 686), # carril izquierdo a las 12
+            "carril_5": (670, 700), # carril derecho a las 6
+            "carril_6": (605, 700), # carril izquierdo a las 6
         }
 
 
@@ -109,16 +157,47 @@ class Cars:
 
     def generarCarro1(self, carril = 1):
 
-        r = math.ceil(random.random() * 12)
+        # Seleccionar un carril aleatoriamente
+
+
+        # seleccionar un carro aleatoriamente
+        r = 1
+
+        if(carril == 1):
+            r = self.getRandom(24, 12)
+        elif carril == 2:
+            r = self.getRandom(12, 0)
+        elif carril == 3:
+            r = self.getRandom(12, 0)
+        elif carril == 4:
+            r = self.getRandom(12, 0)
+        elif carril == 5:
+            r = self.getRandom(12, 0)
+        elif carril == 6:
+            r = self.getRandom(12, 0)
+
+
+
+
         car = self.cars["car_" + str(r)]
         w, h = car["dim"]
         x, y = self.pos_start_1["carril_" + str(carril)]
-
-        image = car["image"]
-        if carril == 1:
-            image = pygame.transform.rotate(image, angle=180)
-
+        
+        if carril == 4:
+            print((x,y,w,h))
+        image = self.girarImagen(car["image"], carril)
         car_rect = pygame.Rect(x, y, w, h)
         return car_rect, image
+
+    def girarImagen(self, image, carril):
+        if carril == 3:
+            return pygame.transform.rotate(image, angle=90)
+        if carril == 4:
+            return pygame.transform.rotate(image, angle=-90)
+        return image
+
+    def getRandom(self, max, min):
+        return math.ceil(random.random() * (max - min) + min)
+
 
 

@@ -9,7 +9,7 @@ def esqueleto(WIDTH, HEIGHT, manager):
     
     scen1_layout_rect = pygame.Rect( WIDTH/4 + 30, 5, 150, 40)
     scen2_layout_rect = pygame.Rect(WIDTH/4 + 180, 5, 150, 40)
-    scen3_layout_rect = pygame.Rect( WIDTH/4 + 330, 5, 150, 40)
+    reset_layout_rect = pygame.Rect( WIDTH -200, 150, 150, 40)
     about = pygame.Rect(WIDTH/4 + 480, 5, 150, 40)
 
     panel1_layout = pygame.Rect(WIDTH/4, 0, 655, 50)
@@ -34,8 +34,8 @@ def esqueleto(WIDTH, HEIGHT, manager):
                             object_id=ObjectID(class_id='@menu_buttons',
                                             object_id='#scen1_button'))
 
-    scen3_button = UIButton(relative_rect=scen3_layout_rect,
-                            text='Escenario 3',
+    reset_button = UIButton(relative_rect=reset_layout_rect,
+                            text='Reiniciar simulación',
                             manager=manager,
                             object_id=ObjectID(class_id='@menu_buttons',
                                             object_id='#scen1_button'))
@@ -53,4 +53,4 @@ def esqueleto(WIDTH, HEIGHT, manager):
 
 
     panel3 = pygame_gui.elements.UIPanel(relative_rect=panel3_layout, starting_layer_height=0, manager=manager, object_id=ObjectID(object_id="panel3", class_id = "@panel3"))
-    return scen1_layout_rect, scen2_layout_rect, scen3_layout_rect, about, panel1_layout, panel2_layout, panel3_layout, panel1, scen1_button, scen2_button, scen3_button, about_button, panel2, panel3
+    return scen1_layout_rect, scen2_layout_rect, reset_layout_rect, about, panel1_layout, panel2_layout, panel3_layout, panel1, scen1_button, scen2_button, reset_button, about_button, panel2, panel3

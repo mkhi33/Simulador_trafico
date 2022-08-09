@@ -40,7 +40,7 @@ manager = pygame_gui.UIManager((WIDTH, HEIGHT),'./ui/theme.json')
 esc1 = escenario_1.Escenario1()
 esc2 = escenario_2.Escenario2()
 
-scen1_layout_rect, scen2_layout_rect, scen3_layout_rect, about, panel1_layout, panel2_layout, panel3_layout, panel1, scen1_button, scen2_button, scen3_button, about_button, panel2, panel3 = ui_menus.esqueleto(WIDTH, HEIGHT, manager)
+scen1_layout_rect, scen2_layout_rect, reset_layout_rect, about, panel1_layout, panel2_layout, panel3_layout, panel1, scen1_button, scen2_button, reset_button, about_button, panel2, panel3 = ui_menus.esqueleto(WIDTH, HEIGHT, manager)
 
 # Fin de elementos en pantalla
 
@@ -53,8 +53,10 @@ def selectOption(option):
 
         scen1_button.select()
         scen2_button.unselect()
-        scen3_button.unselect()
+        reset_button.unselect()
         about_button.unselect()
+        reset_button.visible = True
+        panel3.set_image(pygame.image.load('./resources/images/pista_1.1.png'))
     elif option == 'scen2':
 
         esc2.run(panel3, pygame_gui, manager, window_surface)
@@ -62,26 +64,36 @@ def selectOption(option):
 
         scen1_button.unselect()
         scen2_button.select()
-        scen3_button.unselect()
+        reset_button.unselect()
         about_button.unselect()
+        reset_button.visible = True
+        panel3.set_image(pygame.image.load('./resources/images/pista_2_4.png'))
     elif option == 'scen3':
         scen1_button.unselect()
         scen2_button.unselect()
-        scen3_button.select()
+        reset_button.select()
         about_button.unselect()
+        reset_button.visible = True
+
+        
     elif option == 'about':
         scen1_button.unselect()
         scen2_button.unselect()
-        scen3_button.unselect()
+        reset_button.unselect()
         about_button.select()
         panel3.set_image(pygame.image.load('./resources/images/acerca_de.png'))
+        reset_button.visible = False
 
     else:
         print('Opcion no valida')
 
 def limpiar_manager():
     manager.clear_and_reset()
-    scen1_layout_rect, scen2_layout_rect, scen3_layout_rect, about, panel1_layout, panel2_layout, panel3_layout, panel1, scen1_button, scen2_button, scen3_button, about_button, panel2, panel3 = ui_menus.esqueleto(WIDTH, HEIGHT, manager)
+    scen1_layout_rect, scen2_layout_rect, reset_layout_rect, about, panel1_layout, panel2_layout, panel3_layout, panel1, scen1_button, scen2_button, reset_button, about_button, panel2, panel3 = ui_menus.esqueleto(WIDTH, HEIGHT, manager)
+
+
+
+
 
 
 clock = pygame.time.Clock()
@@ -118,22 +130,21 @@ while is_running:
         if event.type == pygame_gui.UI_BUTTON_PRESSED:
             if event.ui_element == scen1_button:
                 manager.clear_and_reset()
-                scen1_layout_rect, scen2_layout_rect, scen3_layout_rect, about, panel1_layout, panel2_layout, panel3_layout, panel1, scen1_button, scen2_button, scen3_button, about_button, panel2, panel3 = ui_menus.esqueleto(WIDTH, HEIGHT, manager)
+                scen1_layout_rect, scen2_layout_rect, reset_layout_rect, about, panel1_layout, panel2_layout, panel3_layout, panel1, scen1_button, scen2_button, reset_button, about_button, panel2, panel3 = ui_menus.esqueleto(WIDTH, HEIGHT, manager)
                 selectOption('scen1')
 
             elif event.ui_element == scen2_button:
                 manager.clear_and_reset()
-                scen1_layout_rect, scen2_layout_rect, scen3_layout_rect, about, panel1_layout, panel2_layout, panel3_layout, panel1, scen1_button, scen2_button, scen3_button, about_button, panel2, panel3 = ui_menus.esqueleto(WIDTH, HEIGHT, manager)
+                scen1_layout_rect, scen2_layout_rect, reset_layout_rect, about, panel1_layout, panel2_layout, panel3_layout, panel1, scen1_button, scen2_button, reset_button, about_button, panel2, panel3 = ui_menus.esqueleto(WIDTH, HEIGHT, manager)
                 selectOption('scen2')
 
-            elif event.ui_element == scen3_button:
-                manager.clear_and_reset()
-                scen1_layout_rect, scen2_layout_rect, scen3_layout_rect, about, panel1_layout, panel2_layout, panel3_layout, panel1, scen1_button, scen2_button, scen3_button, about_button, panel2, panel3 = ui_menus.esqueleto(WIDTH, HEIGHT, manager)
+            elif event.ui_element == reset_button:
+
                 selectOption('scen3')
 
             elif event.ui_element == about_button:
                 manager.clear_and_reset()
-                scen1_layout_rect, scen2_layout_rect, scen3_layout_rect, about, panel1_layout, panel2_layout, panel3_layout, panel1, scen1_button, scen2_button, scen3_button, about_button, panel2, panel3 = ui_menus.esqueleto(WIDTH, HEIGHT, manager)
+                scen1_layout_rect, scen2_layout_rect, reset_layout_rect, about, panel1_layout, panel2_layout, panel3_layout, panel1, scen1_button, scen2_button, reset_button, about_button, panel2, panel3 = ui_menus.esqueleto(WIDTH, HEIGHT, manager)
                 selectOption('about')
 
         # Eventos para los escenarios

@@ -10,9 +10,9 @@ class Escenario1:
     def __init__(self):
         self.car = None
         self.cars = []
-        self.velocidad_simulacion = 0
+        self.velocidad_simulacion = 5
         self.mostrar_semaforos = True
-        self.n_carriles = 2
+        self.n_carriles = 6
 
     def run(self, panel3, pygame_gui, manager, window_surface):
         RANGE_SLIDER = (0, 500)
@@ -21,6 +21,25 @@ class Escenario1:
         self.slider_layout1 = pygame.Rect(5, 90, 200, 15) 
         self.label_slider_value_layout1 = pygame.Rect(210, 75, 50, 50) 
         self.slider_value1 = 25
+
+
+        # Semaforos
+        self.semaforo_1_layout = pygame.Rect(546, 370, 52, 52)
+        self.semaforo_2_layout = pygame.Rect(680, 370, 52, 52)
+        self.semaforo_3_layout = pygame.Rect(610, 489, 52, 52)
+        self.semaforo_4_layout = pygame.Rect(610, 300, 52, 52)
+
+        self.semaforo_1 = pygame_gui.elements.UIImage(relative_rect=self.semaforo_1_layout, image_surface = window_surface, manager = manager)
+        self.semaforo_2 = pygame_gui.elements.UIImage(relative_rect=self.semaforo_2_layout, image_surface = window_surface, manager = manager)
+        self.semaforo_3 = pygame_gui.elements.UIImage(relative_rect=self.semaforo_3_layout, image_surface = window_surface, manager = manager)
+        self.semaforo_4 = pygame_gui.elements.UIImage(relative_rect=self.semaforo_4_layout, image_surface = window_surface, manager = manager)
+
+        self.semaforo_1.set_image(pygame.image.load('./resources/images/semaforo/amarillo.png'))
+        self.semaforo_2.set_image(pygame.image.load('./resources/images/semaforo/rojo.png'))
+        self.semaforo_3.set_image(pygame.image.load('./resources/images/semaforo/verde.png'))
+        self.semaforo_3.set_image(pygame.image.load('./resources/images/semaforo/verde.png'))
+        self.semaforo_4.set_image(pygame.image.load('./resources/images/semaforo/verde.png'))
+
 
         # Cambiar por switch para activar o desactivar semaforos
         self.btn_layout_semaforo = pygame.Rect(280, 80, 180, 40)
@@ -52,8 +71,14 @@ class Escenario1:
     
     def setSemaforo(self):
         self.mostrar_semaforos = not self.mostrar_semaforos
+
+        self.semaforo_1.visible = self.mostrar_semaforos
+        self.semaforo_2.visible = self.mostrar_semaforos
+        self.semaforo_3.visible = self.mostrar_semaforos
+        self.semaforo_4.visible = self.mostrar_semaforos
         if not self.mostrar_semaforos:
             self.btn_semaforo.set_text('Activar semaforos')
+
         else:
             self.btn_semaforo.set_text('Desactivar semaforos')
 
@@ -67,10 +92,12 @@ class Escenario1:
 
             data = {
                 "car": car,
-                "carril":carril
+                "carril":carril,
+
             }
             self.cars.append(data)
-            
+
+
 
     def actualizarPos(self):
 
@@ -79,7 +106,19 @@ class Escenario1:
             carril = data['carril']
             if( carril == 1):
                 posx = carro.get_relative_rect().left + self.velocidad_simulacion
-            else:
+                carro.set_position(position=(posx, carro.get_relative_rect().top))
+            elif( carril == 2):
                 posx = carro.get_relative_rect().left - self.velocidad_simulacion
+                carro.set_position(position=(posx, carro.get_relative_rect().top))
+            elif( carril == 3):
+                posy = carro.get_relative_rect().top + self.velocidad_simulacion
+                carro.set_position(position=(carro.get_relative_rect().left, posy ))
+            elif( carril == 4):
+                posy = carro.get_relative_rect().top - self.velocidad_simulacion
+                carro.set_position(position=(carro.get_relative_rect().left, posy ))
+
                 
-            carro.set_position(position=(posx, carro.get_relative_rect().top))
+            else:
+                pass
+                
+            
