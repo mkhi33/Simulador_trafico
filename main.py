@@ -10,6 +10,10 @@ from ui import escenario_1
 from ui import escenario_2
 from ui import ui_menus
 
+
+
+
+
 # Constantes
 WIDTH = 1200
 HEIGHT = 700
@@ -125,6 +129,8 @@ while is_running:
 
         # Eventos
         if event.type == pygame.QUIT:
+            esc1.semaforo.bandera = False
+            print(esc1.semaforo.bandera)
             is_running = False
 
         if event.type == pygame_gui.UI_BUTTON_PRESSED:
@@ -168,7 +174,8 @@ while is_running:
                     esc1.setSemaforo()
 
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                print(event)
+                #print(event)
+                pass
             
 
         elif scen2_button.is_selected:

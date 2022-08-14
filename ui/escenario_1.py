@@ -6,6 +6,9 @@ import math
 from pygame_gui.core import ObjectID
 from pygame_gui.elements import UIButton
 
+from core.modelo.escenario1.semaforo import Semaforo
+from core.modelo.escenario1.rutas import Rutas
+
 class Escenario1:
     def __init__(self):
         self.car = None
@@ -13,6 +16,10 @@ class Escenario1:
         self.velocidad_simulacion = 5
         self.mostrar_semaforos = True
         self.n_carriles = 6
+
+
+        # instancias del modelo
+        self.semaforo = Semaforo()
 
     def run(self, panel3, pygame_gui, manager, window_surface):
         RANGE_SLIDER = (0, 500)
@@ -34,11 +41,22 @@ class Escenario1:
         self.semaforo_3 = pygame_gui.elements.UIImage(relative_rect=self.semaforo_3_layout, image_surface = window_surface, manager = manager)
         self.semaforo_4 = pygame_gui.elements.UIImage(relative_rect=self.semaforo_4_layout, image_surface = window_surface, manager = manager)
 
-        self.semaforo_1.set_image(pygame.image.load('./resources/images/semaforo/amarillo.png'))
-        self.semaforo_2.set_image(pygame.image.load('./resources/images/semaforo/rojo.png'))
-        self.semaforo_3.set_image(pygame.image.load('./resources/images/semaforo/verde.png'))
-        self.semaforo_3.set_image(pygame.image.load('./resources/images/semaforo/verde.png'))
-        self.semaforo_4.set_image(pygame.image.load('./resources/images/semaforo/verde.png'))
+
+        # cargar imagenes de los semaforos
+        imagen1, imagen2, imagen3, imagen4 = self.semaforo.obtenerImagenes()
+
+        self.semaforo_1.set_image(pygame.image.load(imagen1))
+        self.semaforo_2.set_image(pygame.image.load(imagen2))
+        self.semaforo_3.set_image(pygame.image.load(imagen3))
+        self.semaforo_4.set_image(pygame.image.load(imagen4))
+
+        # agregar las referencias al modelo
+        self.semaforo.semaforoPygame.append(self.semaforo_1)
+        self.semaforo.semaforoPygame.append(self.semaforo_2)
+        self.semaforo.semaforoPygame.append(self.semaforo_3)
+        self.semaforo.semaforoPygame.append(self.semaforo_4)
+
+
 
 
         # Cambiar por switch para activar o desactivar semaforos
@@ -98,6 +116,8 @@ class Escenario1:
             self.cars.append(data)
 
 
+    def obtenerUltimoCarroCarril(self, n):
+        pass
 
     def actualizarPos(self):
 
@@ -105,6 +125,10 @@ class Escenario1:
             carro = data['car']
             carril = data['carril']
             if( carril == 1):
+                # determinar si el semaforo del carril esta en rojo
+                if(self.semaforo.carril['carril1'] == 'rojo'):
+                    # encontrar el último carro en el carril para colocarlo en la cola
+                    pass
                 posx = carro.get_relative_rect().left + self.velocidad_simulacion
                 carro.set_position(position=(posx, carro.get_relative_rect().top))
             elif( carril == 2):
@@ -120,5 +144,8 @@ class Escenario1:
                 
             else:
                 pass
+
+    def actualizarSemaforo(self):
+        self.semaforo.cambiarAmarillo()
                 
             
