@@ -12,7 +12,7 @@ class Semaforo:
         self.carril = {
             "carril1": {
                 "color": "rojo",
-                "cola": [(400, 370)]
+                "cola": []
             },
             "carril2": {
                 "color": "rojo",

@@ -119,6 +119,7 @@ class Cars:
             "carril_2": (1199, 467),
             "carril_3": (1199, 534),
             "carril_4": (1199, 601),
+            "entrada": (850, 15)
         }
 
         self.pos_start_1 = {
@@ -151,6 +152,15 @@ class Cars:
     
         
         car_rect = pygame.Rect(x, y, w, h)
+        return car_rect, car["image"]
+
+    def generarCarroEntrada(self):
+        r = math.ceil(random.random() * 12)
+        car = self.cars["car_" + str(r)]
+        w, h = car["dim"]
+        x, y = self.pos_start["entrada"]
+        car_rect = pygame.Rect(x, y, w, h)
+        car['image'] = self.girarImagen(car['image'], 5)
         return car_rect, car["image"]
 
     # Para el escenario 2 ya que es una carretera doble via con intersecciones se debe de generar de otra forma
@@ -190,11 +200,15 @@ class Cars:
         car_rect = pygame.Rect(x, y, w, h)
         return car_rect, image
 
-    def girarImagen(self, image, carril):
+    def girarImagen(self, image, carril, bandera = False):
+        if bandera:
+            return pygame.transform.rotate(image, angle=-35)
         if carril == 3:
             return pygame.transform.rotate(image, angle=90)
         if carril == 4:
             return pygame.transform.rotate(image, angle=-90)
+        if carril == 5:
+            return pygame.transform.rotate(image, angle=35)
         return image
 
     def getRandom(self, max, min):
