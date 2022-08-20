@@ -4,23 +4,27 @@ import pygame
 import sys
 class Semaforo:
     # Modelo para cambio de semaforo
-    def __init__(self, tAmarillo = 5, tSemaforo=20):
+    def __init__(self, tAmarillo = 3, tSemaforo=5):
         self.tAmarillo = tAmarillo
         self.tSemaforo = tSemaforo
 
         # Definir las propiedades de los semaforos para cada carril
         self.carril = {
             "carril1": {
-                "color": "rojo"
+                "color": "rojo",
+                "cola": [(400, 370)]
             },
             "carril2": {
                 "color": "rojo",
+                "cola": []
             },
             "carril3": {
                 "color": "rojo",
+                "cola": []
             },
             "carril4": {
                 "color": "verde",
+                "cola": []
             }
         }
 
@@ -54,20 +58,20 @@ class Semaforo:
 
 
     def actualizarSemaforoPygame(self):
-        imagen1, imagen2, imagen3, imagen4 = self.obtenerImagenes()
-        self.semaforoPygame[0].set_image(pygame.image.load(imagen1))
-        self.semaforoPygame[1].set_image(pygame.image.load(imagen2))
-        self.semaforoPygame[2].set_image(pygame.image.load(imagen3))
-        self.semaforoPygame[3].set_image(pygame.image.load(imagen4))
+        if(self.semaforoPygame):
+            imagen1, imagen2, imagen3, imagen4 = self.obtenerImagenes()
+            self.semaforoPygame[0].set_image(pygame.image.load(imagen1))
+            self.semaforoPygame[1].set_image(pygame.image.load(imagen2))
+            self.semaforoPygame[2].set_image(pygame.image.load(imagen3))
+            self.semaforoPygame[3].set_image(pygame.image.load(imagen4))
     
 
     def cambiarAmarillo(self):
-        for carril in self.carril:
+
+        for carril in self.carril.keys():
             color = self.carril[carril]["color"]
             if color == "verde":
                 self.carril[carril]["color"] = "amarillo"
-
-        print(self.carril)
 
     def obtenerImagenes(self):
         path = './resources/images/semaforo'

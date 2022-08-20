@@ -12,7 +12,14 @@ from core.modelo.escenario1.rutas import Rutas
 class Escenario1:
     def __init__(self):
         self.car = None
-        self.cars = []
+        self.cars = [
+            {"carril1": []},
+            {"carril2": []},
+            {"carril3": []},
+            {"carril4": []},
+            {"carril5": []},
+            {"carril6": []},
+        ]
         self.velocidad_simulacion = 5
         self.mostrar_semaforos = True
         self.n_carriles = 6
@@ -20,6 +27,9 @@ class Escenario1:
 
         # instancias del modelo
         self.semaforo = Semaforo()
+        self.semaforo.carril['carril2']['cola'] = [(570, 489)]
+        self.semaforo.carril['carril3']['cola'] = [(573, 400)]
+        self.semaforo.carril['carril4']['cola'] = [(573, 496)]
 
     def run(self, panel3, pygame_gui, manager, window_surface):
         RANGE_SLIDER = (0, 500)
@@ -87,6 +97,7 @@ class Escenario1:
         self.slider_velocidad = pygame_gui.elements.UIHorizontalSlider(relative_rect=self.slider_layout_3, start_value = self.slider_value3, value_range=(0,100), manager = manager)
         self.label_slider_value3 = pygame_gui.elements.UILabel(relative_rect=self.label_slider_value_layout_3, text = "%s%s"%(self.slider_value3, '%'), manager= manager)
     
+        self.cola = []
     def setSemaforo(self):
         self.mostrar_semaforos = not self.mostrar_semaforos
 
@@ -103,49 +114,177 @@ class Escenario1:
     def generarCarros(self, n, pygame, pygame_gui, window_surface, manager):
         objCar = draw_cars.Cars()
         for i in range(n):
+
             carril = math.ceil( random.random() * self.n_carriles )
+
+            if carril == 4 and len(self.semaforo.carril['carril4']['cola']) >2:
+                return
+            if carril == 3 and len(self.semaforo.carril['carril3']['cola']) >2:
+                return
+            if carril == 2 and len(self.semaforo.carril['carril2']['cola']) >4:
+                return
+            if carril == 1 and len(self.semaforo.carril['carril1']['cola']) >4:
+                return
+                
             car_rect, image =  objCar.generarCarro1(carril)
             car = pygame_gui.elements.UIImage(relative_rect=car_rect, image_surface = window_surface, manager = manager)
             car.set_image(image)
 
             data = {
+                "index": i,
                 "car": car,
                 "carril":carril,
+                "dimension":car_rect.size,
 
             }
-            self.cars.append(data)
+
+            self.cars[carril - 1]["carril%s"%carril].append(data)
+    
 
 
-    def obtenerUltimoCarroCarril(self, n):
-        pass
+    def obtenerUltimoCarroCarril(self, carril):
+        return carril[-1]
+
+    
+
+    def actualizarCarril(self, n):
+
+
+        carril = self.cars[n-1]["carril%s"%n]
+
+        index = 0
+
+        for data in carril:
+            
+
+            if(n == 1): # Para el carril 1
+                posx = data['car'].get_relative_rect().left
+                if(self.semaforo.carril['carril1']['color'] == 'rojo' and not (posx > 600) ):
+                    self.cars[n - 1]["carril1"][index] = self.actualizarColaSemaforoCarril1(data)
+                else:
+                    self.semaforo.carril['carril1']['cola'] = [(600, 370)]
+                    data['car'].set_position(position=(posx + self.velocidad_simulacion, data['car'].get_relative_rect().top))
+                    self.cars[n - 1]["carril1"][index] = data
+            elif(n == 2): # Para el carril 2
+                posx = data['car'].get_relative_rect().left
+
+                if ( self.semaforo.carril['carril2']['color'] == 'rojo' and not (posx <= 550)):
+                    self.cars[n - 1]["carril2"][index] = self.actualizarColaSemaforoCarril2(data)
+                else:
+                    self.semaforo.carril['carril2']['cola'] = [(550, 489)]
+                    data['car'].set_position(position=(posx - self.velocidad_simulacion, data['car'].get_relative_rect().top))
+            elif(n == 3): # Para el carril 3
+                posy = data['car'].get_relative_rect().top
+
+                if(self.semaforo.carril['carril4']['color'] == 'rojo') and (posy <= 300): # Error en el nombre de variables del semaforo (carril3  )
+                    self.cars[n - 1]["carril3"][index] = self.actualizarColaSemaforoCarril3(data)
+                else:
+
+                    self.semaforo.carril['carril3']['cola'] = [(573, 400)] # Reiniciar la cola
+                    data['car'].set_position(position=(data['car'].get_relative_rect().left, posy + self.velocidad_simulacion))
+            
+            elif(n == 4):
+
+                posy = data['car'].get_relative_rect().top
+                if(self.semaforo.carril['carril3']['color'] == 'rojo') and (posy >=  496):
+                    self.cars[n - 1]["carril4"][index] = self.actualizarColaSemaforoCarril4(data)
+                else:
+                    self.semaforo.carril['carril4']['cola'] = [(573, 496)]
+                    data['car'].set_position(position=(data['car'].get_relative_rect().left, posy - self.velocidad_simulacion))
+                      
+            index += 1
+
+    def actualizarColaSemaforoCarril4(self, data, separacion = 50):
+
+        nombreCarril = data['carril']
+        carro = data['car']
+
+        posy = data['car'].get_relative_rect().top
+
+
+        w, h = data['dimension'] # Dimensiones del último carro en la cola
+        separacion = w + separacion
+
+        if(self.semaforo.carril['carril4']["cola"] and posy   <= self.semaforo.carril['carril4']["cola"][-1][1]):
+            if(not (573, posy+separacion) in self.semaforo.carril['carril4']["cola"]):
+                self.semaforo.carril['carril4']['cola'].append((573, posy+ separacion))
+        else:
+            data['car'].set_position(position=(data['car'].get_relative_rect().left, posy - self.velocidad_simulacion))
+        return data
+
+
+
 
     def actualizarPos(self):
 
-        for data in self.cars:
-            carro = data['car']
-            carril = data['carril']
-            if( carril == 1):
-                # determinar si el semaforo del carril esta en rojo
-                if(self.semaforo.carril['carril1'] == 'rojo'):
-                    # encontrar el último carro en el carril para colocarlo en la cola
-                    pass
-                posx = carro.get_relative_rect().left + self.velocidad_simulacion
-                carro.set_position(position=(posx, carro.get_relative_rect().top))
-            elif( carril == 2):
-                posx = carro.get_relative_rect().left - self.velocidad_simulacion
-                carro.set_position(position=(posx, carro.get_relative_rect().top))
-            elif( carril == 3):
-                posy = carro.get_relative_rect().top + self.velocidad_simulacion
-                carro.set_position(position=(carro.get_relative_rect().left, posy ))
-            elif( carril == 4):
-                posy = carro.get_relative_rect().top - self.velocidad_simulacion
-                carro.set_position(position=(carro.get_relative_rect().left, posy ))
+        self.actualizarCarril(1)
+        self.actualizarCarril(2)
+        self.actualizarCarril(3)
+        self.actualizarCarril(4)
 
-                
-            else:
-                pass
+
 
     def actualizarSemaforo(self):
         self.semaforo.cambiarAmarillo()
+
+    def actualizarColaSemaforoCarril1(self, data, separacion = 50):
+        
+        
+        nombreCarril = data['carril']
+        carro = data['car']
+
+        posx = data['car'].get_relative_rect().left
+
+        w, h = data['dimension'] # Dimensiones del último carro en la cola
+        separacion = w + separacion
+        if( self.semaforo.carril['carril1']["cola"] and (posx  + separacion >= self.semaforo.carril['carril1']["cola"][-1][0])):
+            if not (posx, 370) in self.semaforo.carril['carril1']['cola']:
+                self.semaforo.carril['carril1']['cola'].append((posx, 370))
+
+        else:
+            data['car'].set_position(position=(posx + self.velocidad_simulacion, data['car'].get_relative_rect().top))
+
+        return data
+
+
+
+    def actualizarColaSemaforoCarril2(self, data, separacion = 50):
+
+        nombreCarril = data['carril']
+        carro = data['car']
+
+        posx = data['car'].get_relative_rect().left
+
+        w, h = data['dimension'] # Dimensiones del último carro en la cola
+        separacion = w + separacion
+
+        if( self.semaforo.carril['carril2']["cola"] and (posx - separacion <= self.semaforo.carril['carril2']["cola"][-1][0])):
+            if not (posx, 489) in self.semaforo.carril['carril2']['cola']:
+                self.semaforo.carril['carril2']['cola'].append((posx, 489))
+
+        else:
+            data['car'].set_position(position=(posx - self.velocidad_simulacion, data['car'].get_relative_rect().top))
+
+        return data
+    def actualizarColaSemaforoCarril3(self, data, separacion = 50):
+
+        nombreCarril = data['carril']
+        carro = data['car']
+
+
+        posy = data['car'].get_relative_rect().top
+
+        w, h = data['dimension'] # Dimensiones del último carro en la cola
+        separacion = w + separacion
+
+        
+        if(self.semaforo.carril['carril3']["cola"] and posy + separacion >= self.semaforo.carril['carril3']["cola"][-1][1]):
+            self.semaforo.carril['carril3']['cola'].append((573, posy))
+        else:
+            data['car'].set_position(position=(data['car'].get_relative_rect().left, posy + self.velocidad_simulacion))
+        return data
+
+
+
                 
             

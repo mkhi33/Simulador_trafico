@@ -122,9 +122,9 @@ class Cars:
         }
 
         self.pos_start_1 = {
-            "carril_1": (0, 420), # carril derecho a las 9
+            "carril_1": (-150, 420), # carril derecho a las 9
             "carril_2": (1199, 340), # carril izquierdo a las 9 1199
-            "carril_3": (573, 145), # carril derecho en las 12
+            "carril_3": (573, -145), # carril derecho en las 12
             "carril_4": (640, 686), # carril izquierdo a las 12
             "carril_5": (670, 700), # carril derecho a las 6
             "carril_6": (605, 700), # carril izquierdo a las 6
@@ -184,7 +184,8 @@ class Cars:
         x, y = self.pos_start_1["carril_" + str(carril)]
         
         if carril == 4:
-            print((x,y,w,h))
+            #print((x,y,w,h))
+            pass
         image = self.girarImagen(car["image"], carril)
         car_rect = pygame.Rect(x, y, w, h)
         return car_rect, image

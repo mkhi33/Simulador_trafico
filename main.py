@@ -61,6 +61,7 @@ def selectOption(option):
         about_button.unselect()
         reset_button.visible = True
         panel3.set_image(pygame.image.load('./resources/images/pista_1.1.png'))
+
     elif option == 'scen2':
 
         esc2.run(panel3, pygame_gui, manager, window_surface)
@@ -79,6 +80,7 @@ def selectOption(option):
         about_button.unselect()
         reset_button.visible = True
 
+
         
     elif option == 'about':
         scen1_button.unselect()
@@ -89,7 +91,8 @@ def selectOption(option):
         reset_button.visible = False
 
     else:
-        print('Opcion no valida')
+        #print('Opcion no valida')
+        pass
 
 def limpiar_manager():
     manager.clear_and_reset()
@@ -130,7 +133,7 @@ while is_running:
         # Eventos
         if event.type == pygame.QUIT:
             esc1.semaforo.bandera = False
-            print(esc1.semaforo.bandera)
+            #print(esc1.semaforo.bandera)
             is_running = False
 
         if event.type == pygame_gui.UI_BUTTON_PRESSED:
@@ -174,8 +177,12 @@ while is_running:
                     esc1.setSemaforo()
 
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                #print(event)
-                pass
+                
+                print(esc1.semaforo.carril['carril4']['cola'])
+                # print(esc1.semaforo.carril['carril3']['cola'])
+                # print(esc1.semaforo.carril['carril2']['cola'])
+                # print(esc1.semaforo.carril['carril1']['cola'])
+                #pass
             
 
         elif scen2_button.is_selected:
@@ -199,7 +206,8 @@ while is_running:
                     esc2.n_carriles = int(event.text)
                     esc2.actualizarCarriles(panel3)
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                print(event)
+                #print(event)
+                pass
         manager.process_events(event)
         
 
